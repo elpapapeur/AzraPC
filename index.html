@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RigLab — Recommandations PC & Serveurs</title>
+  <meta name="description" content="Recommandations matérielles, logicielles, configs optimisées et guides de build PC. Tout ce qu'il faut pour monter ou upgrader sa machine.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080d14;
+      --bg2: #0c1520;
+      --bg3: #111e2e;
+      --blue: #1a6fc4;
+      --blue-l: #2a8fe8;
+      --blue-xl: #4db0ff;
+      --blue-glow: #1a6fc422;
+      --border: #1a3a5c;
+      --border-h: #2a5a8c;
+      --text: #e8f4ff;
+      --muted: #6a8faa;
+      --accent: #00d4ff;
+      --discord: #5865F2;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Scanline subtle */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,100,255,0.012) 2px, rgba(0,100,255,0.012) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Grid background */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(26,111,196,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,111,196,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 3px;
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    .discord-btn {
+      background: transparent;
+      border: 1px solid var(--blue);
+      color: var(--blue-xl);
+      padding: 9px 20px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .discord-btn:hover {
+      background: var(--blue-glow);
+      border-color: var(--blue-l);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: clamp(48px, 8vw, 80px);
+      font-weight: 700;
+      line-height: 1.02;
+      margin-bottom: 24px;
+      letter-spacing: -1px;
+    }
+    h1 .hl { color: var(--accent); }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 540px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      background: var(--blue-l);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover {
+      border-color: var(--blue);
+      color: var(--accent);
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 60px 0;
+    }
+
+    .stat {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: border-color .2s;
+    }
+    .stat:hover { border-color: var(--border-h); }
+
+    .stat-num {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── SECTIONS COMMUNES ── */
+    .section { padding: 60px 0; }
+
+    .section-label {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 38px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 36px;
+      line-height: 1.65;
+      max-width: 580px;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 26px;
+      transition: border-color .25s, transform .25s;
+    }
+    .feature-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-3px);
+    }
+
+    .feat-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .feat-title {
+      font-weight: 600;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .feat-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── BUILDS ── */
+    .build-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 30px;
+      margin-bottom: 18px;
+    }
+
+    .build-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .build-title {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .build-price {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .build-badge {
+      background: var(--bg3);
+      border: 1px solid var(--blue);
+      color: var(--blue-xl);
+      font-size: 11px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .parts {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .part {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .part-cat {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      min-width: 70px;
+      flex-shrink: 0;
+    }
+
+    .part-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ── LOGICIELS ── */
+    .soft-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .soft-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color .2s;
+    }
+    .soft-card:hover { border-color: var(--border-h); }
+
+    .soft-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--bg3);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .soft-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .soft-cat {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── DISCORD ── */
+    .discord-card {
+      background: linear-gradient(135deg, #0c1520 0%, #0e1830 100%);
+      border: 1px solid #3a4580;
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    .discord-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(88,101,242,0.2);
+      border: 1px solid rgba(88,101,242,0.4);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .discord-icon svg {
+      width: 44px;
+      height: 44px;
+      fill: #7289da;
+    }
+
+    .discord-text { flex: 1; min-width: 240px; }
+
+    .discord-text h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .discord-text p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+      margin-bottom: 22px;
+    }
+
+    .discord-join-btn {
+      background: var(--discord);
+      color: #fff;
+      border: none;
+      padding: 13px 26px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .discord-join-btn:hover {
+      background: #4752c4;
+      transform: translateY(-2px);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 0;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-copy {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer-copy span { color: var(--blue-xl); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 680px) {
+      .nav-links { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      .parts { grid-template-columns: 1fr; }
+      .discord-card { flex-direction: column; text-align: center; }
+      .discord-icon { margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">RIG<span>LAB</span></a>
+    <ul class="nav-links">
+      <li><a href="#materiel">Matériel</a></li>
+      <li><a href="#logiciels">Logiciels</a></li>
+      <li><a href="#builds">Builds</a></li>
+      <li><a href="#discord">Discord</a></li>
+    </ul>
+    <a href="#discord" class="discord-btn">Rejoindre Discord</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Recommandations PC & Serveurs</div>
+    <h1>Ton labo pour<br>bâtir le <span class="hl">PC parfait</span></h1>
+    <p class="hero-sub">Recommandations matérielles, logicielles, configs optimisées et guides de build — tout ce qu'il faut pour monter ou upgrader sa machine.</p>
+    <div class="hero-cta">
+      <a href="#builds" class="btn-primary">Explorer les builds →</a>
+      <a href="#discord" class="btn-ghost">Rejoindre la communauté</a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">200+</div>
+      <div class="stat-label">Composants testés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Logiciels recommandés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Configs possibles</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FEATURES -->
+  <section class="section" id="materiel">
+    <p class="section-label">Ce qu'on propose</p>
+    <div class="section-title">Tout pour ton setup</div>
+    <p class="section-sub">Des recommandations honnêtes, sans affiliation, pour tous les budgets et tous les usages.</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-cpu" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">Recommandations matérielles</div>
+        <div class="feat-desc">CPU, GPU, RAM, stockage — les meilleurs rapports qualité/prix par budget et usage.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-apps" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">Logiciels essentiels</div>
+        <div class="feat-desc">Les apps incontournables : outils système, utilitaires, logiciels créatifs et gaming.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-tool" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">Guides de montage</div>
+        <div class="feat-desc">Étape par étape pour monter ou upgrader son PC, avec les erreurs à éviter.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-server" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">NAS & serveurs</div>
+        <div class="feat-desc">Guides et recommandations pour Plex, NAS, homelab et self-hosting.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-chart-bar" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">Benchmarks & comparatifs</div>
+        <div class="feat-desc">Des comparatifs clairs pour choisir sans se perdre dans les specs techniques.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon"><i class="ti ti-messages" style="color:var(--accent)" aria-hidden="true"></i></div>
+        <div class="feat-title">Communauté Discord</div>
+        <div class="feat-desc">Pose tes questions, partage ton setup et obtiens de l'aide en temps réel.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- BUILDS -->
+  <section class="section" id="builds">
+    <p class="section-label">Configs recommandées</p>
+    <div class="section-title">Builds du moment</div>
+    <p class="section-sub">Des configs équilibrées pour chaque budget, mises à jour régulièrement.</p>
+
+    <div class="build-card">
+      <div class="build-header">
+        <div>
+          <div class="build-title">Build Gaming 1440p</div>
+          <div class="build-badge">RECOMMANDÉ</div>
+        </div>
+        <div class="build-price">~1 200 €</div>
+      </div>
+      <div class="parts">
+        <div class="part"><span class="part-cat">CPU</span><span class="part-name">Ryzen 7 7800X3D</span></div>
+        <div class="part"><span class="part-cat">GPU</span><span class="part-name">RX 9070 XT</span></div>
+        <div class="part"><span class="part-cat">RAM</span><span class="part-name">32 Go DDR5 6000 CL30</span></div>
+        <div class="part"><span class="part-cat">Carte mère</span><span class="part-name">B850 Aorus Elite WiFi 7</span></div>
+        <div class="part"><span class="part-cat">Stockage</span><span class="part-name">2 To SSD NVMe Gen4</span></div>
+        <div class="part"><span class="part-cat">Alim</span><span class="part-name">850W 80+ Gold</span></div>
+      </div>
+    </div>
+
+    <div class="build-card">
+      <div class="build-header">
+        <div>
+          <div class="build-title">Build Bureautique / Streaming</div>
+          <div class="build-badge">BUDGET SERRÉ</div>
+        </div>
+        <div class="build-price">~600 €</div>
+      </div>
+      <div class="parts">
+        <div class="part"><span class="part-cat">CPU</span><span class="part-name">Ryzen 5 7600X</span></div>
+        <div class="part"><span class="part-cat">GPU</span><span class="part-name">RX 7700 XT</span></div>
+        <div class="part"><span class="part-cat">RAM</span><span class="part-name">16 Go DDR5 5600 CL36</span></div>
+        <div class="part"><span class="part-cat">Carte mère</span><span class="part-name">B650M Aorus Elite</span></div>
+        <div class="part"><span class="part-cat">Stockage</span><span class="part-name">1 To SSD NVMe Gen4</span></div>
+        <div class="part"><span class="part-cat">Alim</span><span class="part-name">650W 80+ Gold</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- LOGICIELS -->
+  <section class="section" id="logiciels">
+    <p class="section-label">Logiciels</p>
+    <div class="section-title">Les indispensables</div>
+    <p class="section-sub">Une sélection des meilleurs logiciels gratuits et open-source pour Windows.</p>
+    <div class="soft-grid">
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-activity" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">HWiNFO64</div><div class="soft-cat">Monitoring</div></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-flame" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">MSI Afterburner</div><div class="soft-cat">Overclocking</div></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-device-desktop-analytics" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">GPU-Z / CPU-Z</div><div class="soft-cat">Info système</div></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-refresh" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">CrystalDiskMark</div><div class="soft-cat">Benchmark SSD</div></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-temperature" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">CoreTemp</div><div class="soft-cat">Températures CPU</div></div>
+      </div>
+      <div class="soft-card">
+        <div class="soft-icon"><i class="ti ti-device-gamepad" style="color:var(--blue-xl)" aria-hidden="true"></i></div>
+        <div><div class="soft-name">SimHub</div><div class="soft-cat">Sim Racing</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- DISCORD -->
+  <section class="section" id="discord">
+    <div class="discord-card">
+      <div class="discord-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.054a19.908 19.908 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+        </svg>
+      </div>
+      <div class="discord-text">
+        <h2>Rejoins la communauté RigLab</h2>
+        <p>Des passionnés pour t'aider avec ton build, débugger ton PC ou juste parler hardware. Partage ton setup, pose tes questions, et reste à jour sur les bons plans.</p>
+        <!-- Remplace # par ton lien d'invitation Discord -->
+        <a href="#" class="discord-join-btn">Rejoindre le Discord →</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="#materiel">Matériel</a>
+      <a href="#logiciels">Logiciels</a>
+      <a href="#builds">Builds</a>
+      <a href="#discord">Discord</a>
+    </div>
+    <div class="footer-copy">© 2025 <span>RigLab</span> — Fait avec passion pour la communauté PC</div>
+  </div>
+</footer>
+
+</body>
+</html>
