@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AzraPC — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1A1916;--bg2:#201F1C;--bg3:#272522;--bg4:#2F2D28;--wood:#8B6F47;--wood-l:#A68B5B;--wood-xl:#C8A97E;--wood-pale:#F5EFE6;--border:#333028;--border-h:#4A4640;--text:#EDE9E3;--muted:#7A7670;--accent:#C8A97E;--green:#6B9E6B;--red:#C46B6B}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:100vh}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100vh}
+.sb{background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column}
+.sb-logo{padding:20px;border-bottom:1px solid var(--border)}
+.sb-logo h1{font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent)}
+.sb-logo span{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.sb-sec{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:14px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;color:var(--muted);font-size:13px;transition:all .15s;border-left:2px solid transparent}
+.sb-item i{font-size:16px}
+.sb-item:hover{color:var(--text);background:rgba(200,169,126,0.06)}
+.sb-item.active{color:var(--wood-xl);background:rgba(200,169,126,0.1);border-left-color:var(--accent)}
+.sb-foot{margin-top:auto;padding:14px 18px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.main{display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 22px;border-bottom:1px solid var(--border);background:var(--bg2)}
+.topbar h2{font-size:15px;font-weight:500}
+.topbar-right{display:flex;gap:8px}
+.btn{padding:7px 14px;border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:6px;font-weight:500;transition:all .15s}
+.btn-wood{background:var(--wood);color:var(--wood-pale)}.btn-wood:hover{background:var(--wood-l)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}.btn-ghost:hover{color:var(--text);border-color:var(--border-h)}
+.btn-del{background:rgba(196,107,107,0.15);color:var(--red);border:1px solid rgba(196,107,107,0.3)}.btn-del:hover{background:rgba(196,107,107,0.25)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.content{padding:22px;flex:1}
+.panel{display:none}.panel.active{display:block}
+.tab-row{display:flex;border-bottom:1px solid var(--border);margin-bottom:18px}
+.tab{padding:8px 16px;font-size:13px;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:var(--wood-xl);border-bottom-color:var(--accent)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border)}
+.card-hdr h3{font-size:13px;font-weight:500}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:9px 14px;border-bottom:1px solid var(--border)}
+td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(51,48,40,0.7);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(200,169,126,0.03)}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px}
+.badge-wood{background:rgba(139,111,71,0.25);color:var(--wood-xl);border:1px solid rgba(139,111,71,0.4)}
+.badge-green{background:rgba(107,158,107,0.2);color:#8ec88e;border:1px solid rgba(107,158,107,0.3)}
+.badge-gray{background:rgba(122,118,112,0.15);color:var(--muted);border:1px solid var(--border)}
+.fw{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:14px}
+.fw-title{font-size:11px;color:var(--accent);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg.half{display:inline-flex;flex-direction:column;gap:5px;width:calc(50% - 6px);margin-right:12px;vertical-align:top}
+.fg.half:nth-child(2n){margin-right:0}
+.fg label{font-size:11px;color:var(--muted);letter-spacing:.5px}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:8px 11px;font-size:13px;font-family:'DM Sans',sans-serif;width:100%;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--wood)}
+select option{background:var(--bg3)}
+textarea{resize:vertical;min-height:70px}
+.parts-header{display:grid;grid-template-columns:100px 1fr 80px 32px;gap:7px;margin-bottom:6px}
+.parts-header span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.part-row{display:grid;grid-template-columns:100px 1fr 80px 32px;gap:7px;margin-bottom:7px;align-items:center}
+.price-total{display:flex;justify-content:space-between;align-items:center;background:var(--bg4);border:1px solid var(--border);border-radius:7px;padding:11px 15px;margin-top:12px}
+.price-total span{font-size:13px;color:var(--muted)}
+.price-total strong{font-family:'DM Serif Display',serif;font-size:22px;color:var(--accent)}
+.action-row{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--border)}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:7px 12px;margin-bottom:13px}
+.search i{color:var(--muted);font-size:16px}
+.search input{background:transparent;border:none;font-size:13px;color:var(--text);padding:0}
+.search input:focus{outline:none}
+.soft-row{display:grid;grid-template-columns:36px 1fr auto auto;gap:10px;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(51,48,40,0.7)}
+.soft-row:last-child{border-bottom:none}
+.soft-ico{width:36px;height:36px;background:var(--bg3);border:1px solid var(--border);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--accent)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:16px;text-align:center}
+.stat-n{font-family:'DM Serif Display',serif;font-size:30px;color:var(--accent)}
+.stat-l{font-size:12px;color:var(--muted);margin-top:3px}
+.empty{text-align:center;padding:36px;color:var(--muted);font-size:13px}
+.empty i{font-size:32px;display:block;margin-bottom:10px;color:var(--border-h)}
+.toast-wrap{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:6px;z-index:999}
+.toast{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 16px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok{border-color:rgba(107,158,107,.5);color:#8ec88e}
+.toast.err{border-color:rgba(196,107,107,.5);color:var(--red)}
+
+    /* ── LOGIN ── */
+    .login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999}
+    .login-box{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:40px 36px;width:100%;max-width:380px}
+    .login-logo{font-family:'DM Serif Display',serif;font-size:28px;color:var(--accent);text-align:center;margin-bottom:6px}
+    .login-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:28px}
+    .login-err{background:rgba(196,107,107,0.15);border:1px solid rgba(196,107,107,0.35);color:var(--red);font-size:13px;padding:10px 14px;border-radius:7px;margin-bottom:14px;display:none}
+    .login-btn{width:100%;padding:12px;background:var(--wood);color:var(--wood-pale);border:none;border-radius:7px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .2s;margin-top:6px}
+    .login-btn:hover{background:var(--wood-l)}
+    .login-btn:disabled{opacity:.6;cursor:not-allowed}
+    .login-box .fg{margin-bottom:14px}
+    .logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 12px;border-radius:6px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .2s}
+    .logout-btn:hover{color:var(--red);border-color:rgba(196,107,107,0.4)}
+
+    .fb-info{background:rgba(107,158,107,.07);border:1px solid rgba(107,158,107,.25);border-radius:9px;padding:18px;margin-bottom:14px}
+.fb-info h4{color:#8ec88e;font-size:13px;margin-bottom:10px}
+.fb-info ol{font-size:13px;color:var(--muted);line-height:2;padding-left:18px}
+.fb-info ol strong{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- ÉCRAN DE LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">AzraPC</div>
+    <div class="login-sub">Panel d'administration — connexion requise</div>
+    <div class="login-err" id="login-err"></div>
+    <div class="fg"><label>Email</label><input id="login-email" type="email" placeholder="ton@email.com" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <div class="fg"><label>Mot de passe</label><input id="login-pwd" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Se connecter</button>
+    <div style="text-align:center;margin-top:16px">
+      <button onclick="firstSetup()" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;text-decoration:underline;font-family:sans-serif">Premier démarrage ? Configurer Firebase</button>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:none">
+<aside class="sb">
+  <div class="sb-logo"><h1>AzraPC</h1><span>Admin Panel</span></div>
+  <div class="sb-sec">Général</div>
+  <div class="sb-item active" onclick="go('home',this)"><i class="ti ti-home"></i> Vue d'ensemble</div>
+  <div class="sb-sec">Contenu</div>
+  <div class="sb-item" onclick="go('builds',this)"><i class="ti ti-cpu"></i> Builds PC</div>
+  <div class="sb-item" onclick="go('logiciels',this)"><i class="ti ti-apps"></i> Logiciels</div>
+  <div class="sb-item" onclick="go('materiel',this)"><i class="ti ti-tool"></i> Matériel</div>
+  <div class="sb-sec">Site</div>
+  <div class="sb-item" onclick="go('discord',this)"><i class="ti ti-brand-discord"></i> Discord</div>
+  <div class="sb-item" onclick="go('firebase',this)"><i class="ti ti-database"></i> Firebase</div>
+  <div class="sb-foot" id="fb-status">⚠ Firebase non configuré</div>
+</aside>
+
+<div class="main">
+<div class="topbar">
+  <h2 id="topbar-title">Vue d'ensemble</h2>
+  <div class="topbar-right">
+    <a href="index.html" class="btn btn-ghost btn-sm" target="_blank"><i class="ti ti-external-link"></i> Voir le site</a>
+    <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout" style="font-size:13px"></i> Déconnexion</button>
+  </div>
+</div>
+<div class="content">
+
+<!-- HOME -->
+<div id="p-home" class="panel active">
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n" id="cnt-b">0</div><div class="stat-l">Builds</div></div>
+    <div class="stat"><div class="stat-n" id="cnt-s">0</div><div class="stat-l">Logiciels</div></div>
+    <div class="stat"><div class="stat-n" id="cnt-m">0</div><div class="stat-l">Composants</div></div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><h3>Derniers builds</h3></div>
+    <table><thead><tr><th>Nom</th><th>Budget</th><th>Catégorie</th><th>Statut</th></tr></thead>
+    <tbody id="home-builds"><tr><td colspan="4" class="empty">Aucun build</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- BUILDS -->
+<div id="p-builds" class="panel">
+  <div class="tab-row">
+    <div class="tab active" id="bt-l" onclick="stab('b','l')">Liste (<span id="bl-c">0</span>)</div>
+    <div class="tab" id="bt-f" onclick="stab('b','f')">+ Nouveau build</div>
+  </div>
+  <div id="bv-l">
+    <div class="search"><i class="ti ti-search"></i><input type="text" placeholder="Rechercher..." oninput="ftable('btbody',this.value)"></div>
+    <div class="card"><table><thead><tr><th>Nom</th><th>Prix total</th><th>Catégorie</th><th>Statut</th><th></th></tr></thead><tbody id="btbody"></tbody></table></div>
+  </div>
+  <div id="bv-f" style="display:none">
+    <div class="fw">
+      <div class="fw-title"><i class="ti ti-info-circle"></i> Infos générales</div>
+      <div class="fg"><label>Nom du build *</label><input id="b-name" type="text" placeholder="ex: Build Gaming 1440p"></div>
+      <div class="fg half"><label>Catégorie</label><select id="b-cat"><option>Gaming</option><option>Bureautique</option><option>Streaming</option><option>Serveur / NAS</option><option>Workstation</option><option>Polyvalent</option></select></div>
+      <div class="fg half"><label>Badge</label><input id="b-badge" type="text" placeholder="ex: RECOMMANDÉ"></div>
+      <div class="fg half"><label>Statut</label><select id="b-status"><option>Publié</option><option>Brouillon</option></select></div>
+      <div class="fg"><label>Description courte</label><textarea id="b-desc" placeholder="Décris l'usage en 1-2 phrases..."></textarea></div>
+    </div>
+    <div class="fw">
+      <div class="fw-title"><i class="ti ti-cpu"></i> Composants & Prix</div>
+      <div class="parts-header"><span>Catégorie</span><span>Composant</span><span>Prix €</span><span></span></div>
+      <div id="parts-rows"></div>
+      <button class="btn btn-ghost btn-sm" onclick="addPart()" style="margin-top:8px"><i class="ti ti-plus"></i> Ajouter un composant</button>
+      <div class="price-total"><span>Total estimé</span><strong id="total">0 €</strong></div>
+    </div>
+    <input type="hidden" id="b-id">
+    <div class="action-row">
+      <button class="btn btn-ghost" onclick="stab('b','l')">Annuler</button>
+      <button class="btn btn-wood" onclick="saveBuild()"><i class="ti ti-check"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGICIELS -->
+<div id="p-logiciels" class="panel">
+  <div class="tab-row">
+    <div class="tab active" id="st-l" onclick="stab('s','l')">Liste (<span id="sl-c">0</span>)</div>
+    <div class="tab" id="st-f" onclick="stab('s','f')">+ Ajouter</div>
+  </div>
+  <div id="sv-l">
+    <div class="search"><i class="ti ti-search"></i><input type="text" placeholder="Rechercher..." oninput="fsoftlist(this.value)"></div>
+    <div class="card"><div id="soft-items"></div></div>
+  </div>
+  <div id="sv-f" style="display:none">
+    <div class="fw">
+      <div class="fw-title"><i class="ti ti-apps"></i> Nouveau logiciel</div>
+      <div class="fg"><label>Nom *</label><input id="s-name" type="text" placeholder="ex: HWiNFO64"></div>
+      <div class="fg half"><label>Catégorie</label><select id="s-cat"><option>Monitoring</option><option>Overclocking</option><option>Benchmark</option><option>Système</option><option>Gaming</option><option>Créatif</option><option>Réseau</option><option>Autre</option></select></div>
+      <div class="fg half"><label>Prix</label><select id="s-prix"><option>Gratuit</option><option>Open source</option><option>Freemium</option><option>Payant</option></select></div>
+      <div class="fg half"><label>OS</label><select id="s-os"><option>Windows</option><option>Linux</option><option>macOS</option><option>Multiplateforme</option></select></div>
+      <div class="fg"><label>Lien officiel</label><input id="s-url" type="url" placeholder="https://..."></div>
+      <div class="fg"><label>Description</label><textarea id="s-desc" placeholder="Pourquoi recommander ce logiciel ?"></textarea></div>
+    </div>
+    <input type="hidden" id="s-id">
+    <div class="action-row">
+      <button class="btn btn-ghost" onclick="stab('s','l')">Annuler</button>
+      <button class="btn btn-wood" onclick="saveSoft()"><i class="ti ti-check"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MATERIEL -->
+<div id="p-materiel" class="panel">
+  <div class="tab-row">
+    <div class="tab active" id="mt-l" onclick="stab('m','l')">Liste (<span id="ml-c">0</span>)</div>
+    <div class="tab" id="mt-f" onclick="stab('m','f')">+ Ajouter</div>
+  </div>
+  <div id="mv-l">
+    <div class="search"><i class="ti ti-search"></i><input type="text" placeholder="Rechercher..." oninput="ftable('mtbody',this.value)"></div>
+    <div class="card"><table><thead><tr><th>Composant</th><th>Type</th><th>Prix</th><th>Label</th><th></th></tr></thead><tbody id="mtbody"></tbody></table></div>
+  </div>
+  <div id="mv-f" style="display:none">
+    <div class="fw">
+      <div class="fw-title"><i class="ti ti-tool"></i> Nouveau composant</div>
+      <div class="fg"><label>Nom *</label><input id="m-name" type="text" placeholder="ex: Ryzen 7 7800X3D"></div>
+      <div class="fg half"><label>Type</label><select id="m-type"><option>CPU</option><option>GPU</option><option>RAM</option><option>Carte mère</option><option>Stockage</option><option>Alimentation</option><option>Boîtier</option><option>Refroidissement</option><option>Périphérique</option></select></div>
+      <div class="fg half"><label>Prix</label><input id="m-prix" type="text" placeholder="ex: 350 €"></div>
+      <div class="fg half"><label>Label</label><input id="m-label" type="text" placeholder="Top pick, Recommandé..."></div>
+      <div class="fg half"><label>Compatibilité</label><input id="m-compat" type="text" placeholder="AM5, DDR5..."></div>
+      <div class="fg"><label>Lien (LDLC, Amazon...)</label><input id="m-url" type="url" placeholder="https://..."></div>
+      <div class="fg"><label>Description</label><textarea id="m-desc" placeholder="Pourquoi recommander ce composant ?"></textarea></div>
+    </div>
+    <input type="hidden" id="m-id">
+    <div class="action-row">
+      <button class="btn btn-ghost" onclick="stab('m','l')">Annuler</button>
+      <button class="btn btn-wood" onclick="saveMat()"><i class="ti ti-check"></i> Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- DISCORD -->
+<div id="p-discord" class="panel">
+  <div class="fw">
+    <div class="fw-title"><i class="ti ti-brand-discord"></i> Paramètres Discord</div>
+    <div class="fg"><label>Lien d'invitation</label><input id="d-url" type="url" placeholder="https://discord.gg/..."></div>
+    <div class="fg half"><label>Membres affichés</label><input id="d-members" type="number" value="0"></div>
+  </div>
+  <div class="action-row"><button class="btn btn-wood" onclick="saveDiscord()"><i class="ti ti-check"></i> Sauvegarder</button></div>
+</div>
+
+<!-- FIREBASE -->
+<div id="p-firebase" class="panel">
+  <div class="fb-info">
+    <h4><i class="ti ti-bulb"></i> Comment configurer Firebase</h4>
+    <ol>
+      <li>Va sur <strong>console.firebase.google.com</strong> et crée un projet</li>
+      <li>Active <strong>Firestore Database</strong> (mode production ou test)</li>
+      <li>Dans Paramètres → Tes applications → ajoute une <strong>app Web</strong></li>
+      <li>Copie les clés ci-dessous et clique <strong>Sauvegarder</strong></li>
+      <li>Dans les règles Firestore, autorise les lectures publiques pour le site</li>
+    </ol>
+  </div>
+  <div class="fw">
+    <div class="fw-title"><i class="ti ti-database"></i> Clés Firebase</div>
+    <div class="fg half"><label>API Key</label><input id="fb-key" type="text" placeholder="AIzaSy..."></div>
+    <div class="fg half"><label>Auth Domain</label><input id="fb-domain" type="text" placeholder="projet.firebaseapp.com"></div>
+    <div class="fg half"><label>Project ID</label><input id="fb-pid" type="text" placeholder="mon-projet-abc12"></div>
+    <div class="fg half"><label>Storage Bucket</label><input id="fb-bucket" type="text" placeholder="projet.appspot.com"></div>
+    <div class="fg half"><label>Messaging Sender ID</label><input id="fb-msid" type="text" placeholder="123456789"></div>
+    <div class="fg half"><label>App ID</label><input id="fb-appid" type="text" placeholder="1:123:web:abc..."></div>
+  </div>
+  <div class="action-row"><button class="btn btn-wood" onclick="saveFirebase()"><i class="ti ti-check"></i> Sauvegarder la config</button></div>
+</div>
+
+</div>
+</div>
+</div>
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+
+// ── FIREBASE AUTH ──
+let authMod = null;
+
+async function initAuth(cfg) {
+  const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+  const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+  const auth = getAuth(app);
+  authMod = { auth, signInWithEmailAndPassword, signOut };
+
+  onAuthStateChanged(auth, user => {
+    if(user) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('main-app').style.display = 'grid';
+      loadFirebase(cfg).then(()=>refreshHome()).catch(()=>{});
+    } else {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('main-app').style.display = 'none';
+    }
+  });
+}
+
+window.firstSetup = () => {
+  sessionStorage.setItem('azra-setup','1');
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'grid';
+  // Naviguer vers Firebase
+  setTimeout(()=>{
+    document.querySelector('.sb-item[onclick*="firebase"]').click();
+  },100);
+};
+
+window.doLogin = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const pwd = document.getElementById('login-pwd').value;
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-err');
+  err.style.display = 'none';
+  if(!email||!pwd){err.textContent='Remplis les deux champs.';err.style.display='block';return;}
+  if(!authMod){err.textContent="Configure Firebase d'abord — section Firebase.";err.style.display='block';return;}
+  btn.disabled = true;
+  btn.textContent = 'Connexion...';
+  try {
+    await authMod.signInWithEmailAndPassword(authMod.auth, email, pwd);
+  } catch(e) {
+    const msgs = {
+      'auth/invalid-credential':'Email ou mot de passe incorrect.',
+      'auth/user-not-found':'Aucun compte avec cet email.',
+      'auth/wrong-password':'Mot de passe incorrect.',
+      'auth/too-many-requests':'Trop de tentatives. Réessaie plus tard.',
+      'auth/network-request-failed':'Problème réseau.'
+    };
+    err.textContent = msgs[e.code] || 'Erreur : '+e.message;
+    err.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Se connecter';
+  }
+};
+
+window.doLogout = async () => {
+  if(!authMod) return;
+  await authMod.signOut(authMod.auth);
+};
+
+// ── UTILS ──
+window.uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,5);
+window.toast = (msg, type='ok') => {
+  const w = document.getElementById('toasts');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.innerHTML = `<i class="ti ti-${type==='ok'?'circle-check':'alert-circle'}"></i> ${msg}`;
+  w.appendChild(t);
+  setTimeout(()=>t.classList.add('show'),10);
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2800);
+};
+
+// ── STATE ──
+let data = { builds: [], soft: [], mat: [] };
+let fbMod = null; // Firebase module
+
+// ── NAVIGATION ──
+window.go = (page, el) => {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('p-'+page).classList.add('active');
+  el.classList.add('active');
+  const titles = {"home":"Vue d'ensemble","builds":"Builds PC","logiciels":"Logiciels","materiel":"Matériel","discord":"Discord","firebase":"Firebase"};
+  document.getElementById('topbar-title').textContent = titles[page] || page;
+  if(page==='home') refreshHome();
+  if(page==='builds') renderBuilds();
+  if(page==='logiciels') renderSoft();
+  if(page==='materiel') renderMat();
+};
+
+window.stab = (sect, view) => {
+  const map = {b:['bt','bv'],s:['st','sv'],m:['mt','mv']};
+  const [ti,vi] = map[sect];
+  document.getElementById(ti+'-l').classList.toggle('active',view==='l');
+  document.getElementById(ti+'-f').classList.toggle('active',view==='f');
+  document.getElementById(vi+'-l').style.display = view==='l'?'block':'none';
+  document.getElementById(vi+'-f').style.display = view==='f'?'block':'none';
+  if(view==='f') {
+    if(sect==='b'){document.getElementById('b-id').value='';clearB();addDefaultParts();}
+    if(sect==='s'){document.getElementById('s-id').value='';clearS();}
+    if(sect==='m'){document.getElementById('m-id').value='';clearM();}
+  }
+};
+
+// ── FIREBASE ──
+async function loadFirebase(cfg) {
+  const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+  const { getFirestore, collection, getDocs, setDoc, deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+  const db = getFirestore(app);
+  fbMod = { db, collection, getDocs, setDoc, deleteDoc, doc };
+  document.getElementById('fb-status').innerHTML = '<span style="color:#8ec88e">✓ Firebase connecté</span>';
+  return true;
+}
+
+window.saveFirebase = async () => {
+  // Bouton accessible même sans être connecté pour le premier setup
+  const cfg = {
+    apiKey: document.getElementById('fb-key').value.trim(),
+    authDomain: document.getElementById('fb-domain').value.trim(),
+    projectId: document.getElementById('fb-pid').value.trim(),
+    storageBucket: document.getElementById('fb-bucket').value.trim(),
+    messagingSenderId: document.getElementById('fb-msid').value.trim(),
+    appId: document.getElementById('fb-appid').value.trim()
+  };
+  if(!cfg.apiKey||!cfg.projectId){toast("Remplis au moins l'API Key et le Project ID","err");return;}
+  localStorage.setItem('azra-fb-cfg', JSON.stringify(cfg));
+  try {
+    await loadFirebase(cfg);
+    toast('Firebase configuré !');
+    refreshHome();
+  } catch(e) { toast("Erreur Firebase: "+e.message,"err"); }
+};
+
+async function fbGet(col) {
+  if(!fbMod) return [];
+  const {db,collection,getDocs} = fbMod;
+  const snap = await getDocs(collection(db, col));
+  return snap.docs.map(d=>({id:d.id,...d.data()}));
+}
+async function fbSet(col, id, obj) {
+  if(!fbMod) throw new Error('Firebase non configuré — va dans Firebase pour rentrer tes clés');
+  const {db,setDoc,doc} = fbMod;
+  await setDoc(doc(db, col, id), obj);
+}
+async function fbDel(col, id) {
+  if(!fbMod) throw new Error('Firebase non configuré');
+  const {db,deleteDoc,doc} = fbMod;
+  await deleteDoc(doc(db, col, id));
+}
+
+// ── HOME ──
+async function refreshHome() {
+  try {
+    data.builds = await fbGet('builds');
+    data.soft = await fbGet('logiciels');
+    data.mat = await fbGet('materiel');
+  } catch(e) {}
+  document.getElementById('cnt-b').textContent = data.builds.length;
+  document.getElementById('cnt-s').textContent = data.soft.length;
+  document.getElementById('cnt-m').textContent = data.mat.length;
+  const tb = document.getElementById('home-builds');
+  if(!data.builds.length){tb.innerHTML='<tr><td colspan="4" class="empty">Aucun build</td></tr>';return;}
+  tb.innerHTML=data.builds.slice(0,5).map(b=>`<tr><td>${b.name}</td><td>${b.total?b.total.toLocaleString('fr-FR')+' €':'—'}</td><td><span class="badge badge-wood">${b.cat}</span></td><td><span class="badge ${b.status==='Publié'?'badge-green':'badge-gray'}">${b.status}</span></td></tr>`).join('');
+}
+
+// ── BUILDS ──
+function clearB(){['b-name','b-badge','b-desc'].forEach(i=>document.getElementById(i).value='');document.getElementById('b-cat').value='Gaming';document.getElementById('b-status').value='Publié';document.getElementById('parts-rows').innerHTML='';document.getElementById('total').textContent='0 €';}
+
+function addDefaultParts(){['CPU','GPU','RAM','Carte mère','Stockage','Alimentation'].forEach(c=>window.addPart(c,'',''));}
+
+window.addPart = (cat='',name='',price='') => {
+  const r = document.createElement('div');
+  r.className='part-row';
+  r.innerHTML=`<input type="text" placeholder="CPU, GPU..." value="${cat}" style="font-size:12px;padding:6px 8px"><input type="text" placeholder="Nom du composant" value="${name}" oninput="calcTotal()"><input type="number" placeholder="Prix" value="${price}" min="0" oninput="calcTotal()" style="padding:6px 8px"><button class="btn btn-del" style="padding:5px 7px" onclick="this.closest('.part-row').remove();calcTotal()"><i class="ti ti-x"></i></button>`;
+  document.getElementById('parts-rows').appendChild(r);
+  calcTotal();
+};
+
+window.calcTotal = () => {
+  let t=0;
+  document.querySelectorAll('#parts-rows input[type="number"]').forEach(i=>{t+=parseFloat(i.value)||0;});
+  document.getElementById('total').textContent=Math.round(t).toLocaleString('fr-FR')+' €';
+};
+
+function getParts(){
+  return [...document.querySelectorAll('#parts-rows .part-row')].filter(r=>r.querySelectorAll('input')[1].value.trim()).map(r=>{
+    const ins=r.querySelectorAll('input');
+    return {cat:ins[0].value||'—',name:ins[1].value,price:parseFloat(ins[2].value)||0};
+  });
+}
+
+window.saveBuild = async () => {
+  const name = document.getElementById('b-name').value.trim();
+  if(!name){toast("Le nom est requis","err");return;}
+  const parts = getParts();
+  const total = parts.reduce((s,p)=>s+p.price,0);
+  const id = document.getElementById('b-id').value || uid();
+  const obj = {id,name,cat:document.getElementById('b-cat').value,badge:document.getElementById('b-badge').value,status:document.getElementById('b-status').value,desc:document.getElementById('b-desc').value,parts,total:Math.round(total)};
+  try {
+    await fbSet('builds',id,obj);
+    const idx=data.builds.findIndex(b=>b.id===id);
+    if(idx>=0) data.builds[idx]=obj; else data.builds.unshift(obj);
+    document.getElementById('bl-c').textContent=data.builds.length;
+    document.getElementById('cnt-b').textContent=data.builds.length;
+    stab('b','l'); renderBuilds(); toast('Build "'+name+'" enregistré !');
+  } catch(e){toast(e.message,'err');}
+};
+
+function renderBuilds(){
+  document.getElementById('bl-c').textContent=data.builds.length;
+  const tb=document.getElementById('btbody');
+  if(!data.builds.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><i class="ti ti-cpu"></i>Aucun build. Clique sur "+ Nouveau build".</div></td></tr>';return;}
+  tb.innerHTML=data.builds.map(b=>`<tr><td><strong>${b.name}</strong>${b.badge?'<br><span style="font-size:11px;color:var(--muted)">'+b.badge+'</span>':''}</td><td>${b.total?b.total.toLocaleString('fr-FR')+' €':'—'}</td><td><span class="badge badge-wood">${b.cat}</span></td><td><span class="badge ${b.status==='Publié'?'badge-green':'badge-gray'}">${b.status}</span></td><td style="display:flex;gap:5px"><button class="btn btn-ghost btn-sm" onclick="editBuild('${b.id}')"><i class="ti ti-edit"></i></button><button class="btn btn-del btn-sm" onclick="delBuild('${b.id}')"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+
+window.editBuild = id => {
+  const b=data.builds.find(x=>x.id===id);if(!b)return;
+  stab('b','f');
+  document.getElementById('b-id').value=id;
+  document.getElementById('b-name').value=b.name;
+  document.getElementById('b-cat').value=b.cat;
+  document.getElementById('b-badge').value=b.badge||'';
+  document.getElementById('b-status').value=b.status;
+  document.getElementById('b-desc').value=b.desc||'';
+  document.getElementById('parts-rows').innerHTML='';
+  (b.parts||[]).forEach(p=>window.addPart(p.cat,p.name,p.price));
+  if(!b.parts?.length) addDefaultParts();
+  calcTotal();
+};
+
+window.delBuild = async id => {
+  if(!confirm('Supprimer ce build ?')) return;
+  try{await fbDel('builds',id);}catch(e){toast(e.message,'err');return;}
+  data.builds=data.builds.filter(b=>b.id!==id);
+  document.getElementById('cnt-b').textContent=data.builds.length;
+  renderBuilds(); toast('Build supprimé','err');
+};
+
+// ── LOGICIELS ──
+function clearS(){['s-name','s-url','s-desc'].forEach(i=>document.getElementById(i).value='');document.getElementById('s-cat').value='Monitoring';document.getElementById('s-prix').value='Gratuit';document.getElementById('s-os').value='Windows';}
+
+window.saveSoft = async () => {
+  const name=document.getElementById('s-name').value.trim();
+  if(!name){toast("Le nom est requis","err");return;}
+  const id=document.getElementById('s-id').value||uid();
+  const obj={id,name,cat:document.getElementById('s-cat').value,prix:document.getElementById('s-prix').value,os:document.getElementById('s-os').value,url:document.getElementById('s-url').value,desc:document.getElementById('s-desc').value};
+  try{
+    await fbSet('logiciels',id,obj);
+    const idx=data.soft.findIndex(s=>s.id===id);
+    if(idx>=0) data.soft[idx]=obj; else data.soft.unshift(obj);
+    document.getElementById('sl-c').textContent=data.soft.length;
+    document.getElementById('cnt-s').textContent=data.soft.length;
+    stab('s','l'); renderSoft(); toast('Logiciel "'+name+'" enregistré !');
+  }catch(e){toast(e.message,'err');}
+};
+
+function renderSoft(){
+  document.getElementById('sl-c').textContent=data.soft.length;
+  const c=document.getElementById('soft-items');
+  if(!data.soft.length){c.innerHTML='<div class="empty"><i class="ti ti-apps"></i>Aucun logiciel. Clique sur "+ Ajouter".</div>';return;}
+  c.innerHTML=data.soft.map(s=>`<div class="soft-row"><div class="soft-ico"><i class="ti ti-apps"></i></div><div><div style="font-weight:500">${s.name}</div><div style="font-size:12px;color:var(--muted)">${s.cat} · ${s.os}${s.url?` · <a href="${s.url}" target="_blank" style="color:var(--accent)">Site</a>`:''}</div>${s.desc?`<div style="font-size:12px;color:var(--muted);margin-top:2px">${s.desc}</div>`:''}</div><span class="badge ${s.prix==='Gratuit'||s.prix==='Open source'?'badge-green':'badge-wood'}">${s.prix}</span><div style="display:flex;gap:5px"><button class="btn btn-ghost btn-sm" onclick="editSoft('${s.id}')"><i class="ti ti-edit"></i></button><button class="btn btn-del btn-sm" onclick="delSoft('${s.id}')"><i class="ti ti-trash"></i></button></div></div>`).join('');
+}
+
+window.editSoft = id => {
+  const s=data.soft.find(x=>x.id===id);if(!s)return;
+  stab('s','f');
+  document.getElementById('s-id').value=id;
+  document.getElementById('s-name').value=s.name;
+  document.getElementById('s-cat').value=s.cat;
+  document.getElementById('s-prix').value=s.prix;
+  document.getElementById('s-os').value=s.os;
+  document.getElementById('s-url').value=s.url||'';
+  document.getElementById('s-desc').value=s.desc||'';
+};
+
+window.delSoft = async id => {
+  if(!confirm('Supprimer ce logiciel ?')) return;
+  try{await fbDel('logiciels',id);}catch(e){toast(e.message,'err');return;}
+  data.soft=data.soft.filter(s=>s.id!==id);
+  document.getElementById('cnt-s').textContent=data.soft.length;
+  renderSoft(); toast('Logiciel supprimé','err');
+};
+
+window.fsoftlist = val => {
+  document.querySelectorAll('.soft-row').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});
+};
+
+// ── MATERIEL ──
+function clearM(){['m-name','m-prix','m-label','m-url','m-compat','m-desc'].forEach(i=>document.getElementById(i).value='');}
+
+window.saveMat = async () => {
+  const name=document.getElementById('m-name').value.trim();
+  if(!name){toast("Le nom est requis","err");return;}
+  const id=document.getElementById('m-id').value||uid();
+  const obj={id,name,type:document.getElementById('m-type').value,prix:document.getElementById('m-prix').value,label:document.getElementById('m-label').value,url:document.getElementById('m-url').value,compat:document.getElementById('m-compat').value,desc:document.getElementById('m-desc').value};
+  try{
+    await fbSet('materiel',id,obj);
+    const idx=data.mat.findIndex(m=>m.id===id);
+    if(idx>=0) data.mat[idx]=obj; else data.mat.unshift(obj);
+    document.getElementById('ml-c').textContent=data.mat.length;
+    document.getElementById('cnt-m').textContent=data.mat.length;
+    stab('m','l'); renderMat(); toast('Composant "'+name+'" enregistré !');
+  }catch(e){toast(e.message,'err');}
+};
+
+function renderMat(){
+  document.getElementById('ml-c').textContent=data.mat.length;
+  const tb=document.getElementById('mtbody');
+  if(!data.mat.length){tb.innerHTML='<tr><td colspan="5"><div class="empty"><i class="ti ti-tool"></i>Aucun composant.</div></td></tr>';return;}
+  tb.innerHTML=data.mat.map(m=>`<tr><td><strong>${m.name}</strong>${m.compat?'<br><span style="font-size:11px;color:var(--muted)">'+m.compat+'</span>':''}</td><td><span class="badge badge-wood">${m.type}</span></td><td>${m.prix||'—'}</td><td style="color:var(--muted)">${m.label||'—'}</td><td style="display:flex;gap:5px"><button class="btn btn-ghost btn-sm" onclick="editMat('${m.id}')"><i class="ti ti-edit"></i></button><button class="btn btn-del btn-sm" onclick="delMat('${m.id}')"><i class="ti ti-trash"></i></button></td></tr>`).join('');
+}
+
+window.editMat = id => {
+  const m=data.mat.find(x=>x.id===id);if(!m)return;
+  stab('m','f');
+  document.getElementById('m-id').value=id;
+  document.getElementById('m-name').value=m.name;
+  document.getElementById('m-type').value=m.type;
+  document.getElementById('m-prix').value=m.prix||'';
+  document.getElementById('m-label').value=m.label||'';
+  document.getElementById('m-url').value=m.url||'';
+  document.getElementById('m-compat').value=m.compat||'';
+  document.getElementById('m-desc').value=m.desc||'';
+};
+
+window.delMat = async id => {
+  if(!confirm('Supprimer ce composant ?')) return;
+  try{await fbDel('materiel',id);}catch(e){toast(e.message,'err');return;}
+  data.mat=data.mat.filter(m=>m.id!==id);
+  document.getElementById('cnt-m').textContent=data.mat.length;
+  renderMat(); toast('Composant supprimé','err');
+};
+
+window.ftable = (tbodyId, val) => {
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(val.toLowerCase())?'':'none';});
+};
+
+// ── DISCORD ──
+window.saveDiscord = async () => {
+  const obj={discordUrl:document.getElementById('d-url').value,members:document.getElementById('d-members').value};
+  try{await fbSet('settings','discord',obj);toast('Discord sauvegardé !');}
+  catch(e){toast(e.message,'err');}
+};
+
+// ── INIT ──
+const saved = localStorage.getItem('azra-fb-cfg');
+if(saved) {
+  const cfg = JSON.parse(saved);
+  ['key','domain','pid','bucket','msid','appid'].forEach((k,i)=>{
+    const keys = ['apiKey','authDomain','projectId','storageBucket','messagingSenderId','appId'];
+    const el = document.getElementById('fb-'+k);
+    if(el) el.value = cfg[keys[i]]||'';
+  });
+  // initAuth gère la connexion ET charge Firebase si déjà authentifié
+  initAuth(cfg).catch(()=>{});
+} else {
+  // Pas de config Firebase : montrer directement l'écran login avec message
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('login-err').textContent = 'Configure Firebase dans la section Firebase (accessible après connexion).';
+  // Pour le premier setup, permettre l'accès temporaire sans auth
+  const bypass = sessionStorage.getItem('azra-setup');
+  if(bypass) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-app').style.display = 'grid';
+  }
+}
+</script>
+</body>
+</html>
